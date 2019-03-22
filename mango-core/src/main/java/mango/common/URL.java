@@ -100,6 +100,9 @@ public class URL {
         return value;
     }
 
+    /**
+     * 根据name获取参数，如果为null，则返回defaultValue
+     */
     public Integer getIntParameter(String name, int defaultValue) {
         String value = parameters.get(name);
         if (value == null || value.length() == 0) {
@@ -108,6 +111,9 @@ public class URL {
         return Integer.parseInt(value);
     }
 
+    /**
+     * 添加一个参数
+     */
     public void addParameter(String name, String value) {
         if (StringUtils.isEmpty(name) || StringUtils.isEmpty(value)) {
             return;
@@ -147,6 +153,10 @@ public class URL {
         return true;
     }
 
+    /**
+     * 解析URL
+     * protocol://host:port/path?key=value
+     */
     public static URL parse(String url) {
         if (StringUtils.isBlank(url)) {
             throw new RpcFrameworkException("url is empty");
@@ -155,53 +165,71 @@ public class URL {
         String host = null;
         int port = 0;
         String path = null;
-        Map<String, String> parameters = new HashMap<String, String>();;
-        int i = url.indexOf("?"); // seperator between body and parameters
+        Map<String, String> parameters = new HashMap<String, String>();
+        // 获取？的位置
+        int i = url.indexOf("?");
         if (i >= 0) {
+            // 根据&进行分割
             String[] parts = url.substring(i + 1).split("\\&");
-
             for (String part : parts) {
                 part = part.trim();
                 if (part.length() > 0) {
+                    //根据=号进行分割
                     int j = part.indexOf('=');
                     if (j >= 0) {
                         parameters.put(part.substring(0, j), part.substring(j + 1));
                     } else {
+                        // 没有 = 号的话，就让value等于key
                         parameters.put(part, part);
                     }
                 }
             }
+            // 截掉参数
             url = url.substring(0, i);
         }
         i = url.indexOf("://");
         if (i >= 0) {
-            if (i == 0) throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            // 如果以 :// 开头
+            if (i == 0) {
+                throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            }
             protocol = url.substring(0, i);
             url = url.substring(i + 3);
         } else {
+            // 也可以用 :/ 做了一个兼容
             i = url.indexOf(":/");
             if (i >= 0) {
-                if (i == 0) throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+                if (i == 0) {
+                    throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+                }
                 protocol = url.substring(0, i);
+                // 截掉协议头
                 url = url.substring(i + 1);
             }
         }
 
+        // 获取路径
         i = url.indexOf("/");
         if (i >= 0) {
             path = url.substring(i + 1);
             url = url.substring(0, i);
         }
 
+        // 获取端口
         i = url.indexOf(":");
         if (i >= 0 && i < url.length() - 1) {
             port = Integer.parseInt(url.substring(i + 1));
             url = url.substring(0, i);
         }
-        if (url.length() > 0) host = url;
+        if (url.length() > 0){
+            host = url;
+        }
         return new URL(protocol, host, port, path, parameters);
     }
 
+    /**
+     * 组装URI,不带参数
+     */
     public String getUri() {
         StringBuilder sb = new StringBuilder(100);
         sb.append(protocol).append(Constants.PROTOCOL_SEPARATOR).append(host)
@@ -210,6 +238,9 @@ public class URL {
         return sb.toString();
     }
 
+    /**
+     * 组装URI，带参数
+     */
     public String toFullUri() {
         StringBuilder builder = new StringBuilder(1024);
         builder.append(getUri()).append("?");
@@ -224,6 +255,9 @@ public class URL {
         return builder.toString();
     }
 
+    /**
+     * 克隆此URL
+     */
     public URL clone0() {
         Map<String, String> params = new HashMap<String, String>();
         if (this.parameters != null) {
@@ -232,6 +266,9 @@ public class URL {
         return new URL(protocol, host, port, path, params);
     }
 
+    /**
+     * 获取host:port
+     */
     public String getServerAndPort() {
         return buildHostPortStr(host, port);
     }
@@ -261,19 +298,33 @@ public class URL {
         return sb.toString();
     }
 
+    /**
+     * 判断两个URL是否相等
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         URL url = (URL) o;
 
-        if (port != url.port) return false;
-        if (!protocol.equals(url.protocol)) return false;
-        if (!host.equals(url.host)) return false;
-        if (!path.equals(url.path)) return false;
+        if (port != url.port) {
+            return false;
+        }
+        if (!protocol.equals(url.protocol)) {
+            return false;
+        }
+        if (!host.equals(url.host)) {
+            return false;
+        }
+        if (!path.equals(url.path)) {
+            return false;
+        }
         return !(parameters != null ? !parameters.equals(url.parameters) : url.parameters != null);
-
     }
 
     @Override

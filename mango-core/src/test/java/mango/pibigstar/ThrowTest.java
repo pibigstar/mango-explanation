@@ -5,7 +5,7 @@ package mango.pibigstar;
  * @create 2019-03-21 16:34
  * @desc
  **/
-public class Test {
+public class ThrowTest {
 
     public static void main(String[] args){
         testThrow();
