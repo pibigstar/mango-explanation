@@ -1,6 +1,7 @@
 package mango.config;
 
 /**
+ * 注册中心的配置类
  * @author Ricky Fung
  */
 public class RegistryConfig extends AbstractConfig {

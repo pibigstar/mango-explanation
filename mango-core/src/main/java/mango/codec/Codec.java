@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
 import java.io.IOException;
 
 /**
- * ${DESCRIPTION}
+ * 这个应该是对URL中的参数进行加解码的
  *
  * @author Ricky Fung
  */

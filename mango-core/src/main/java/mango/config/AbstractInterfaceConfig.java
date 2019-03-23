@@ -12,19 +12,23 @@ import java.net.InetAddress;
 import java.util.*;
 
 /**
- * ${DESCRIPTION}
  *
+ * 默认接口有的配置文件信息
  * @author Ricky Fung
  */
 public class AbstractInterfaceConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 3928005245888186559L;
+    // 接口名
     protected String interfaceName;
+    // 组名
     protected String group;
+    // 版本号
     protected String version;
+    // 超时时间
     protected Integer timeout;
+    // 重试次数
     protected Integer retries;
-
     // 应用信息
     protected ApplicationConfig application;
 

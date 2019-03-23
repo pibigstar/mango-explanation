@@ -21,8 +21,10 @@ public class DefaultCodec extends AbstractCodec {
 
     @Override
     public byte[] encode(URL url, Object message) throws IOException {
+        // 获取URL参数中的序列化值，默认是 protostuff
         String serialization = url.getParameter(URLParam.serialization.getName(), URLParam.serialization.getValue());
         logger.info("Codec encode serialization:{}", serialization);
+        // 根据序列化值去获取获取SPI扩展实例对象
         return serialize(message, ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(serialization));
     }
 

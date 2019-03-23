@@ -24,10 +24,12 @@ public class ReferenceConfig<T> extends AbstractInterfaceConfig {
     private Class<T> interfaceClass;
     protected transient volatile T proxy;
 
+    // 标记是否被初始化过
     private transient volatile boolean initialized;
     private List<Cluster<T>> clusters;
 
     public T get() {
+        // 如果代理为空，那么就先执行初始化
         if (proxy == null) {
             init();
         }
@@ -36,6 +38,7 @@ public class ReferenceConfig<T> extends AbstractInterfaceConfig {
 
     private synchronized void init() {
         if (initialized) {
+            // 如果已经被初始化过了
             return;
         }
 
@@ -43,8 +46,7 @@ public class ReferenceConfig<T> extends AbstractInterfaceConfig {
             throw new IllegalStateException("<mango:reference interface=\"\" /> interface not allow null!");
         }
         try {
-            interfaceClass = (Class<T>) Class.forName(interfaceName, true, Thread.currentThread()
-                    .getContextClassLoader());
+            interfaceClass = (Class<T>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("reference class not found", e);
         }
@@ -54,6 +56,9 @@ public class ReferenceConfig<T> extends AbstractInterfaceConfig {
         initialized = true;
     }
 
+    /**
+     * @Author:pibigstar
+     */
     private void initProxy() {
         if(!interfaceClass.isInterface()) {
             throw new IllegalArgumentException("<mango:reference interface=\"\" /> is not interface!");

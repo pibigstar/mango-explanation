@@ -1,18 +1,22 @@
 package mango.config;
 
 /**
- * ${DESCRIPTION}
- *
+ * 应用配置类
  * @author Ricky Fung
  */
 public class ApplicationConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 3706130733051761098L;
-    private String name;    //当前应用名称，必填
+    // 当前应用名称，必填
+    private String name;
+    // 版本号
     private String version;
-    private String manager;    //负责人
-    private String organization;  //组织名称(BU或部门)
-    private String env;    //应用环境，如：develop/test/product
+    //负责人
+    private String manager;
+    //组织名称(BU或部门)
+    private String organization;
+    //应用环境，如：develop/test/product
+    private String env;
     private Boolean isDefault = Boolean.TRUE;
 
     public String getName() {

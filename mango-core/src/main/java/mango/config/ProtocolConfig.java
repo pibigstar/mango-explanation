@@ -1,27 +1,31 @@
 package mango.config;
 
 /**
- * ${DESCRIPTION}
- *
+ * 协议配置类
  * @author Ricky Fung
  */
 public class ProtocolConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 1896740286017633L;
+    // 协议名
     private String name;
     private String host;
     private Integer port;
     private String codec;
     private String serialization;
 
+    // 池类型
     private String poolType;
     private Integer minPoolSize;
     private Integer maxPoolSize;
 
     private String charset;
-    private Integer bufferSize; //网络读写缓冲区大小
-    private Integer payload;    //请求及响应数据包大小限制，单位：字节
-    private Integer heartbeat;  //心跳间隔
+    //网络读写缓冲区大小
+    private Integer bufferSize;
+    //请求及响应数据包大小限制，单位：字节
+    private Integer payload;
+    //心跳间隔
+    private Integer heartbeat;
 
     private Boolean isDefault = Boolean.TRUE;
 

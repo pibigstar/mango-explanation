@@ -3,8 +3,8 @@ package mango.common;
 import mango.util.Constants;
 
 /**
- * ${DESCRIPTION}
  *
+ * URL 参数name和默认值
  * @author Ricky Fung
  */
 public enum URLParam {

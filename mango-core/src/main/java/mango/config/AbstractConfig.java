@@ -3,8 +3,8 @@ package mango.config;
 import java.io.Serializable;
 
 /**
- * ${DESCRIPTION}
  *
+ *  这个应该是个基类，所有的配置类统一继承此类
  * @author Ricky Fung
  */
 public class AbstractConfig implements Serializable {

@@ -6,8 +6,7 @@ import mango.core.extension.Scope;
 import java.io.IOException;
 
 /**
- * ${DESCRIPTION}
- *
+ * 序列化和反序列化
  * @author Ricky Fung
  */
 @SPI(value = "protostuff", scope = Scope.SINGLETON)
