@@ -6,20 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ${DESCRIPTION}
- *
+ * 默认的请求体
  * @author Ricky Fung
  */
 public class DefaultRequest implements Serializable, Request {
 
     private static final long serialVersionUID = 7478520607109127572L;
-
+    // 请求id
     private Long requestId;
+    // 接口名
     private String interfaceName;
+    // 方法名
     private String methodName;
+    // 参数
     private Object[] arguments;
+    // 参数类型
     private Class<?>[] parameterTypes;
-    private byte type;  //请求类型
+    //请求类型
+    private byte type;
     private Map<String, String> attachments;
 
     @Override

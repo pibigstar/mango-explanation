@@ -1,7 +1,7 @@
 package mango.exception;
 
 /**
- * RPC异常
+ * RPC框架层异常
  * @author Ricky Fung
  */
 public class RpcFrameworkException extends AbstractRpcException {

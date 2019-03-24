@@ -1,8 +1,7 @@
 package mango.exception;
 
 /**
- * ${DESCRIPTION}
- *
+ * 信息传输异常
  * @author Ricky Fung
  */
 public class TransportException extends AbstractRpcException {

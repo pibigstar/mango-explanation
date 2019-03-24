@@ -1,6 +1,7 @@
 package mango.core;
 
 /**
+ *  任务状态枚举
  * @author Ricky Fung
  */
 public enum FutureState {

@@ -1,7 +1,7 @@
 package mango.exception;
 
 /**
- * ${DESCRIPTION}
+ * RPC异常基类
  *
  * @author Ricky Fung
  */

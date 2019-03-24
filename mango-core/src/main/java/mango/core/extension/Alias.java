@@ -3,7 +3,7 @@ package mango.core.extension;
 import java.lang.annotation.*;
 
 /**
- *
+ * SPI 实例别称
  * @author Ricky Fung
  */
 @Documented

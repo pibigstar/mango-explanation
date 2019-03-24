@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ${DESCRIPTION}
+ * 默认响应体
  *
  * @author Ricky Fung
  */
@@ -15,7 +15,9 @@ public class DefaultResponse implements Serializable, Response {
     private static final long serialVersionUID = -7432143972263049268L;
 
     private Long requestId;
+    // 异常信息
     private Exception exception;
+    // 返回结果
     private Object result;
     private Map<String, String> attachments;
 

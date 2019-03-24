@@ -1,8 +1,7 @@
 package mango.exception;
 
 /**
- * wrapper biz exception.
- *
+ * 对基类RPC异常进行包装
  * @author Ricky Fung
  */
 public class RpcBizException extends AbstractRpcException {

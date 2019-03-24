@@ -207,7 +207,7 @@ public class ExtensionLoader<T> {
         checkInit();
 
         checkExtensionType(clz);
-
+        // 获取SPI name
         String spiName = getSpiName(clz);
 
         synchronized (this) {

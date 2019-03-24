@@ -3,8 +3,7 @@ package mango.core;
 import java.util.Map;
 
 /**
- * ${DESCRIPTION}
- *
+ * 请求实体的功能接口
  * @author Ricky Fung
  */
 public interface Request {

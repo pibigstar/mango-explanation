@@ -1,7 +1,7 @@
 package mango.core;
 
 /**
- * ${DESCRIPTION}
+ * 响应失败的功能接口
  *
  * @author Ricky Fung
  */

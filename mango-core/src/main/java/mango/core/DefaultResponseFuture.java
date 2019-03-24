@@ -7,6 +7,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * 默认响应实体类
  * @author Ricky Fung
  */
 public class DefaultResponseFuture<T> extends AbstractResponseFuture<T> {
