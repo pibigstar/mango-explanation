@@ -5,7 +5,7 @@ import mango.core.extension.SPI;
 import mango.core.extension.Scope;
 
 /**
- * ${DESCRIPTION}
+ * 注册中心工厂接口
  *
  * @author Ricky Fung
  */

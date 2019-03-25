@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ${DESCRIPTION}
- *
+ * 协议抽象层
  * @author Ricky Fung
  */
 public abstract class AbstractProtocol implements Protocol {

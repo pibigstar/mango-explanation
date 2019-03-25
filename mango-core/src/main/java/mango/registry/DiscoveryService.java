@@ -5,6 +5,7 @@ import mango.common.URL;
 import java.util.List;
 
 /**
+ * 服务发现接口
  * @author Ricky Fung
  */
 public interface DiscoveryService {

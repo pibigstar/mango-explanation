@@ -4,7 +4,7 @@ import mango.core.extension.SPI;
 import java.lang.reflect.InvocationHandler;
 
 /**
- * ${DESCRIPTION}
+ * 代理工厂接口
  *
  * @author Ricky Fung
  */

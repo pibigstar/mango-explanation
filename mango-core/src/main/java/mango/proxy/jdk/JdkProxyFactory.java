@@ -5,8 +5,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 /**
- * ${DESCRIPTION}
  *
+ * 默认jdb代理工厂类
  * @author Ricky Fung
  */
 public class JdkProxyFactory implements ProxyFactory {

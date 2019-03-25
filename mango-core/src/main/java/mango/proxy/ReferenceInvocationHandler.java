@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ${DESCRIPTION}
  *
+ * 引用服务反射调用处理器
  * @author Ricky Fung
  */
 public class ReferenceInvocationHandler<T> implements InvocationHandler {
@@ -45,6 +45,7 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
         }
 
         DefaultRequest request = new DefaultRequest();
+        // 生成一个request
         request.setRequestId(RequestIdGenerator.getRequestId());
         request.setInterfaceName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
@@ -60,6 +61,7 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
             request.setAttachment(URLParam.version.getName(), cluster.getUrl().getVersion());
             request.setAttachment(URLParam.group.getName(), cluster.getUrl().getGroup());
             try {
+                // 执行call方法，返回response对象
                 Response resp = cluster.call(request);
                 return getValue(resp);
             } catch (RuntimeException e) {
@@ -68,9 +70,7 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
                     if (t != null && t instanceof Exception) {
                         throw t;
                     } else {
-                        String msg =
-                                t == null ? "biz exception cause is null" : ("biz exception cause is throwable error:" + t.getClass()
-                                        + ", errmsg:" + t.getMessage());
+                        String msg = t == null ? "biz exception cause is null" : ("biz exception cause is throwable error:" + t.getClass() + ", errmsg:" + t.getMessage());
                         throw new RpcServiceException(msg);
                     }
                 } else if (!throwException) {
@@ -84,7 +84,9 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
         }
         throw new RpcServiceException("Reference call Error: cluster not exist, interface=" + clz.getName());
     }
-
+    /**
+     * 检查方法是否出现异常
+     **/
     private boolean checkMethodExceptionSignature(Method method) {
         Class<?>[] exps = method.getExceptionTypes();
         return exps!=null && exps.length>0;
@@ -93,13 +95,14 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
     public Object getValue(Response resp) {
         Exception exception = resp.getException();
         if (exception != null) {
-            throw (exception instanceof RuntimeException) ? (RuntimeException) exception : new RpcFrameworkException(
-                    exception.getMessage(), exception);
+            throw (exception instanceof RuntimeException) ? (RuntimeException) exception : new RpcFrameworkException(exception.getMessage(), exception);
         }
         return resp.getResult();
     }
 
-
+    /**
+     * 返回一个默认的value
+     */
     private Object getDefaultReturnValue(Class<?> returnType) {
         if (returnType != null && returnType.isPrimitive()) {
             return PrimitiveDefault.getDefaultReturnValue(returnType);
@@ -107,6 +110,9 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
         return null;
     }
 
+    /**
+     *  提供一个返回默认value
+     */
     private static class PrimitiveDefault {
         private static boolean defaultBoolean;
         private static char defaultChar;
@@ -119,6 +125,9 @@ public class ReferenceInvocationHandler<T> implements InvocationHandler {
 
         private static Map<Class<?>, Object> primitiveValues = new HashMap<Class<?>, Object>();
 
+        /**
+         * 静态代码块，当访问此类的静态方法时，此类将会被初始化，此时就会调用此静态代码块，将值put进去
+         */
         static {
             primitiveValues.put(boolean.class, defaultBoolean);
             primitiveValues.put(char.class, defaultChar);

@@ -3,7 +3,7 @@ package mango.registry;
 import mango.common.URL;
 
 /**
- * ${DESCRIPTION}
+ * 注册中心接口
  *
  * @author Ricky Fung
  */

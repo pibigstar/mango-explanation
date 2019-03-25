@@ -13,7 +13,7 @@ import mango.util.Constants;
 import java.util.List;
 
 /**
- *  协议包装类
+ *  具有过滤功能的协议包装类
  * @author Ricky Fung
  */
 public class ProtocolFilterWrapper implements Protocol {

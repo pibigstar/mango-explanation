@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * ${DESCRIPTION}
+ * 抽象注册中心工厂
  *
  * @author Ricky Fung
  */

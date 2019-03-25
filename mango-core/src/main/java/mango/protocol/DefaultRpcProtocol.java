@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ${DESCRIPTION}
- *
+ * 默认的协议
  * @author Ricky Fung
  */
 public class DefaultRpcProtocol extends AbstractProtocol {

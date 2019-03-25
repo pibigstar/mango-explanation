@@ -5,7 +5,6 @@ package mango.exception;
  * @author Ricky Fung
  */
 public class RpcFrameworkException extends AbstractRpcException {
-
     private static final long serialVersionUID = -3361435023080270457L;
 
     public RpcFrameworkException() {
