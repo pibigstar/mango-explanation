@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * RPC上下文
  * @author Ricky Fung
  */
 public class RpcContext {
@@ -14,8 +15,11 @@ public class RpcContext {
     private Request request;
     private Response response;
     private Long requestId;
-
+    /**
+     * 线程间数据传输
+     */
     private static final ThreadLocal<RpcContext> localContext = new ThreadLocal<RpcContext>() {
+        @Override
         protected RpcContext initialValue() {
             return new RpcContext();
         }
@@ -25,6 +29,9 @@ public class RpcContext {
         return localContext.get();
     }
 
+    /**
+     * 初始化RPC上下文
+     */
     public static RpcContext init(Request request){
         RpcContext context = new RpcContext();
         if(request != null){

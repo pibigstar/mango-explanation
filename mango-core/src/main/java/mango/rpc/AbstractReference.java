@@ -8,6 +8,7 @@ import mango.exception.RpcFrameworkException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ *  抽象服务引用
  * @author Ricky Fung
  */
 public abstract class AbstractReference<T> implements Reference<T> {
@@ -43,13 +44,15 @@ public abstract class AbstractReference<T> implements Reference<T> {
         if (!isAvailable()) {
             throw new RpcFrameworkException(this.getClass().getName() + " call Error: node is not available, url=" + url.getUri());
         }
-
+        // 计数加1
         incrActiveCount(request);
         Response response = null;
         try {
+            // doCall，延迟到子类具体实现
             response = doCall(request);
             return response;
         } finally {
+            // 计数减1
             decrActiveCount(request, response);
         }
 
@@ -59,7 +62,7 @@ public abstract class AbstractReference<T> implements Reference<T> {
     public int activeCount() {
         return activeCounter.get();
     }
-
+    // 定一个抽象方法，具体实现放到子类中
     protected abstract Response doCall(Request request);
 
     protected void decrActiveCount(Request request, Response response) {

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * 配置处理器接口
  *
  * @author Ricky Fung
  */

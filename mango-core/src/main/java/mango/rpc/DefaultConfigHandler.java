@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * 默认配置处理器
  *
  * @author Ricky Fung
  */

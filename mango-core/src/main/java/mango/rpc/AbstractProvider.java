@@ -7,7 +7,8 @@ import mango.core.Response;
 import java.lang.reflect.Method;
 
 /**
- * @author Ricky Fung
+ * 抽象服务提供者
+ *  @author Ricky Fung
  */
 public abstract class AbstractProvider<T> implements Provider<T> {
     protected Class<T> clz;
@@ -56,8 +57,14 @@ public abstract class AbstractProvider<T> implements Provider<T> {
         return "[" + this.getClass().getName() + "] url=" + url;
     }
 
+    /**
+     * 反射执行request中的方法
+     */
     protected abstract Response invoke(Request request);
 
+    /**
+     * 根据参数类型获取request中的方法对象
+     */
     protected Method lookup(Request request) {
         try {
             return clz.getMethod(request.getMethodName(), request.getParameterTypes());

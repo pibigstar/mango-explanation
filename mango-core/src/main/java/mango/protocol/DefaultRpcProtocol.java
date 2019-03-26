@@ -40,6 +40,9 @@ public class DefaultRpcProtocol extends AbstractProtocol {
 
     }
 
+    /**
+     * 定义一个内部类供此类使用
+     */
     class DefaultRpcReference<T> extends AbstractReference<T> {
         private NettyClient client;
 

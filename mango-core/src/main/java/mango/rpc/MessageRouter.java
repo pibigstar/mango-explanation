@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
+ * 消息路由
  * @author Ricky Fung
  */
 public class MessageRouter implements MessageHandler {

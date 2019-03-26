@@ -1,7 +1,7 @@
 package mango.rpc;
 
 /**
- * ${DESCRIPTION}
+ * 服务暴露接口
  *
  * @author Ricky Fung
  */
