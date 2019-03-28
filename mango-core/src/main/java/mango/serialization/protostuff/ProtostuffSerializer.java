@@ -13,19 +13,23 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * Protostuff协议序列化
  * @author Ricky Fung
  */
 public class ProtostuffSerializer implements Serializer {
 
+    //TODO：
     private static final LoadingCache<Class<?>, Schema<?>> schemas = CacheBuilder.newBuilder()
             .build(new CacheLoader<Class<?>, Schema<?>>() {
                 @Override
                 public Schema<?> load(Class<?> cls) throws Exception {
-
                     return RuntimeSchema.createFrom(cls);
                 }
             });
 
+    /**
+     * 序列化
+     */
     @Override
     public byte[] serialize(Object msg) throws IOException {
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
@@ -37,7 +41,9 @@ public class ProtostuffSerializer implements Serializer {
             buffer.clear();
         }
     }
-
+    /**
+     * 反序列化
+     */
     @Override
     public <T> T deserialize(byte[] buf, Class<T> type) throws IOException {
         Schema<T> schema = getSchema(type);

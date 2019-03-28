@@ -38,6 +38,7 @@ public class RpcContext {
             context.setRequest(request);
             context.setRequestId(request.getRequestId());
         }
+        // 将RPCContext放入本地上下文中
         localContext.set(context);
         return context;
     }

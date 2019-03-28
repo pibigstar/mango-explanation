@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 消息路由
+ * 消息路由，获取执行者，请求request
  * @author Ricky Fung
  */
 public class MessageRouter implements MessageHandler {
@@ -22,6 +22,9 @@ public class MessageRouter implements MessageHandler {
 
     public MessageRouter() {}
 
+    /**
+     * 初始化时将provider加入到列表中
+     */
     public MessageRouter(Provider<?> provider) {
         addProvider(provider);
     }
@@ -30,25 +33,22 @@ public class MessageRouter implements MessageHandler {
     public Response handle(Request request) {
 
         String serviceKey = FrameworkUtils.getServiceKey(request);
-
+        // 根据serviceKey获取调用者
         Provider<?> provider = providers.get(serviceKey);
 
         if (provider == null) {
             logger.error(this.getClass().getSimpleName() + " handler Error: provider not exist serviceKey=" + serviceKey);
-            RpcFrameworkException exception =
-                    new RpcFrameworkException(this.getClass().getSimpleName() + " handler Error: provider not exist serviceKey="
-                            + serviceKey );
-
+            RpcFrameworkException exception = new RpcFrameworkException(this.getClass().getSimpleName() + " handler Error: provider not exist serviceKey=" + serviceKey );
             DefaultResponse response = new DefaultResponse();
             response.setException(exception);
             return response;
         }
-
         return call(request, provider);
     }
 
     protected Response call(Request request, Provider<?> provider) {
         try {
+            // 通过调用者执行call方法
             return provider.call(request);
         } catch (Exception e) {
             DefaultResponse response = new DefaultResponse();
@@ -57,6 +57,9 @@ public class MessageRouter implements MessageHandler {
         }
     }
 
+    /**
+     * 添加一个执行者
+     */
     public synchronized void addProvider(Provider<?> provider) {
         String serviceKey = FrameworkUtils.getServiceKey(provider.getUrl());
         if (providers.containsKey(serviceKey)) {
@@ -65,7 +68,9 @@ public class MessageRouter implements MessageHandler {
         providers.put(serviceKey, provider);
         logger.info("RequestRouter addProvider: url=" + provider.getUrl());
     }
-
+    /**
+     * 移除一个执行者
+     */
     public synchronized void removeProvider(Provider<?> provider) {
         String serviceKey = FrameworkUtils.getServiceKey(provider.getUrl());
         providers.remove(serviceKey);

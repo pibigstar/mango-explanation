@@ -20,40 +20,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * ${DESCRIPTION}
- *
+ * Netty客户端实现类
  * @author Ricky Fung
  */
 public class NettyClientImpl extends AbstractClient {
-
+    // 时间循环组
     private EventLoopGroup group = new NioEventLoopGroup();
     private Bootstrap b = new Bootstrap();
 
-    private final ConcurrentHashMap<Long, ResponseFuture> responseFutureMap =
-            new ConcurrentHashMap<>(256);
-
+    private final ConcurrentHashMap<Long, ResponseFuture> responseFutureMap = new ConcurrentHashMap<>(256);
+    // 定时任务线程池
     private ScheduledExecutorService scheduledExecutorService;
     private int timeout;
-
+    // 是否初始化
     private volatile boolean initializing;
 
     private volatile ChannelWrapper channelWrapper;
 
     public NettyClientImpl(URL url) {
         super(url);
-
+        // 根据host和port构建远程地址
         this.remoteAddress = new InetSocketAddress(url.getHost(), url.getPort());
+        // 获取超时时间
         this.timeout = url.getIntParameter(URLParam.requestTimeout.getName(), URLParam.requestTimeout.getIntValue());
 
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(5,
+        this.scheduledExecutorService = new ScheduledThreadPoolExecutor(5,
                 new DefaultThreadFactory(String.format("%s-%s", Constants.FRAMEWORK_NAME, "future")));
-
+        // 每隔5秒清理一次超时Future
         this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -70,7 +67,7 @@ public class NettyClientImpl extends AbstractClient {
             return true;
         }
         initializing = true;
-
+        // 判断状态时否为存活可用
         if(state.isAvailable()){
             logger.warn("NettyClient has initialized: url=" + url);
             return true;
@@ -79,7 +76,7 @@ public class NettyClientImpl extends AbstractClient {
         // 最大响应包限制
         final int maxContentLength = url.getIntParameter(URLParam.maxContentLength.getName(),
                 URLParam.maxContentLength.getIntValue());
-
+        // 通过netty服务端发送信息给客户端
         b.group(group).channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
@@ -87,10 +84,13 @@ public class NettyClientImpl extends AbstractClient {
                 .option(ChannelOption.SO_SNDBUF, url.getIntParameter(URLParam.bufferSize.getName(), URLParam.bufferSize.getIntValue()))
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    public void initChannel(SocketChannel ch)
-                            throws Exception {
-                        ch.pipeline().addLast(new NettyDecoder(codec, url, maxContentLength, Constants.HEADER_SIZE, 4), //
-                                new NettyEncoder(codec, url), //
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(
+                                // 解码工具
+                                new NettyDecoder(codec, url, maxContentLength, Constants.HEADER_SIZE, 4),
+                                // 加密工具
+                                new NettyEncoder(codec, url),
+                                // 客户端消息处理工具
                                 new NettyClientHandler());
                     }
                 });
@@ -217,6 +217,9 @@ public class NettyClientImpl extends AbstractClient {
 
     }
 
+    /**
+     * Netty客户端信息处理器
+     */
     private class NettyClientHandler extends ChannelInboundHandlerAdapter {
         private Logger logger = LoggerFactory.getLogger(getClass());
 

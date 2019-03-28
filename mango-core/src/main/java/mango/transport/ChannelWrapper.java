@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 通道包装工具
  * @author Ricky Fung
  */
 public class ChannelWrapper {

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ${DESCRIPTION}
- *
+ * Netty 解码工具
  * @author Ricky Fung
  */
 public class NettyDecoder extends LengthFieldBasedFrameDecoder {

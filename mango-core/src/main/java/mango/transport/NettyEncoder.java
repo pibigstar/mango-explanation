@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ${DESCRIPTION}
- *
+ * Netty 加密工具
  * @author Ricky Fung
  */
 public class NettyEncoder extends MessageToByteEncoder {

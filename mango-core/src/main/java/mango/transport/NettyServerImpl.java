@@ -26,18 +26,25 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * ${DESCRIPTION}
- *
+ * Netty服务器实现类
  * @author Ricky Fung
  */
 public class NettyServerImpl extends AbstractServer {
-
+    /**
+     * NioEventLoopGroup第一个通常称为“boss”，接受传入连接。 第二个通常称为“worker”，
+     * 当“boss”接受连接并且向“worker”注册接受连接，则“worker”处理所接受连接的流量
+     */
     private EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
+    /**
+     * 用于设置服务器的助手类
+     */
     private ServerBootstrap serverBootstrap = new ServerBootstrap();
-
-    private ThreadPoolExecutor pool;    //业务处理线程池
+    //业务处理线程池
+    private ThreadPoolExecutor pool;
+    // 消息处理路由
     private MessageRouter router;
-
+    // 是否初始化
     private volatile boolean initializing = false;
 
     public NettyServerImpl(URL url, MessageRouter router){
@@ -76,11 +83,10 @@ public class NettyServerImpl extends AbstractServer {
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    public void initChannel(SocketChannel ch)
-                            throws IOException {
-
-                        ch.pipeline().addLast(new NettyDecoder(codec, url, maxContentLength, Constants.HEADER_SIZE, 4), //
-                                new NettyEncoder(codec, url), //
+                    public void initChannel(SocketChannel ch) throws IOException {
+                        ch.pipeline().addLast(new NettyDecoder(codec, url, maxContentLength, Constants.HEADER_SIZE, 4),
+                                new NettyEncoder(codec, url),
+                                // Netty服务端消息处理器
                                 new NettyServerHandler());
                     }
                 });
@@ -146,20 +152,23 @@ public class NettyServerImpl extends AbstractServer {
         }
     }
 
+    /**
+     * Netty服务端消息处理器
+     */
     class NettyServerHandler extends SimpleChannelInboundHandler<DefaultRequest> {
 
         @Override
         protected void channelRead0(ChannelHandlerContext context, DefaultRequest request) throws Exception {
 
             logger.info("Rpc server receive request id:{}", request.getRequestId());
-            //处理请求
+            //处理请求，每收到一个request请求就启动一个线程去处理
             processRpcRequest(context, request);
         }
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            logger.error("NettyServerHandler exceptionCaught: remote=" + ctx.channel().remoteAddress()
-                    + " local=" + ctx.channel().localAddress(), cause);
+            // 异常处理
+            logger.error("NettyServerHandler exceptionCaught: remote=" + ctx.channel().remoteAddress() + " local=" + ctx.channel().localAddress(), cause);
             ctx.channel().close();
         }
     }
@@ -168,20 +177,23 @@ public class NettyServerImpl extends AbstractServer {
     private void processRpcRequest(final ChannelHandlerContext context, final DefaultRequest request) {
         final long processStartTime = System.currentTimeMillis();
         try {
+            // 启动一个线程去处理该请求
             this.pool.execute(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
+                        // 初始化RPC上下文
                         RpcContext.init(request);
                         processRpcRequest(context, request, processStartTime);
                     } finally {
+                        // 销毁此RPC上下文
                         RpcContext.destroy();
                     }
 
                 }
             });
         } catch (RejectedExecutionException e) {
+            // 构建一个异常的response
             DefaultResponse response = new DefaultResponse();
             response.setRequestId(request.getRequestId());
             response.setException(new RpcFrameworkException("process thread pool is full, reject"));
@@ -190,12 +202,15 @@ public class NettyServerImpl extends AbstractServer {
         }
 
     }
-
+    /** 处理rpc请求 **/
     private void processRpcRequest(ChannelHandlerContext context, DefaultRequest request, long processStartTime) {
-
-        DefaultResponse response = (DefaultResponse) this.router.handle(request);//;
+        // 将request拿到消息路由中去处理，返回默认的response实体
+        DefaultResponse response = (DefaultResponse) this.router.handle(request);
+        // 设置整个请求的时间
         response.setProcessTime(System.currentTimeMillis() - processStartTime);
-        if(request.getType()!=Constants.REQUEST_ONEWAY){    //非单向调用
+        //非单向调用
+        if(request.getType()!=Constants.REQUEST_ONEWAY){
+            // 将response写入到通道中
             context.writeAndFlush(response);
         }
         logger.info("Rpc server process request:{} end...", request.getRequestId());

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 
 /**
+ * 抽象的Netty服务端
  * @author Ricky Fung
  */
 public abstract class AbstractServer implements NettyServer {
@@ -20,15 +21,14 @@ public abstract class AbstractServer implements NettyServer {
 
     protected URL url;
     protected Codec codec;
-
+    // 通道状态
     protected volatile ChannelState state = ChannelState.NEW;
 
     public AbstractServer() {}
 
     public AbstractServer(URL url) {
         this.url = url;
-        this.codec =
-                ExtensionLoader.getExtensionLoader(Codec.class).getExtension(url.getParameter(URLParam.codec.getName(), URLParam.codec.getValue()));
+        this.codec = ExtensionLoader.getExtensionLoader(Codec.class).getExtension(url.getParameter(URLParam.codec.getName(), URLParam.codec.getValue()));
     }
 
     @Override

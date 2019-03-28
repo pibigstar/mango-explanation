@@ -1,7 +1,7 @@
 package mango.transport;
 
 /**
- * ${DESCRIPTION}
+ * Netty服务端接口
  *
  * @author Ricky Fung
  */

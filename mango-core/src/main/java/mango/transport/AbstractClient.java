@@ -10,12 +10,18 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 
 /**
+ * 抽象客户端
  * @author Ricky Fung
  */
 public abstract class AbstractClient implements NettyClient {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    /**
+     * 本地Socket地址
+     */
     protected InetSocketAddress localAddress;
+    /**
+     * 远程Socket地址
+     */
     protected InetSocketAddress remoteAddress;
 
     protected URL url;
