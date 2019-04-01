@@ -8,7 +8,7 @@ import mango.core.Request;
 
 /**
  * ${DESCRIPTION}
- *
+ * 框架工具类
  * @author Ricky Fung
  */
 public class FrameworkUtils {

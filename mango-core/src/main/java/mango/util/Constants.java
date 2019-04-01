@@ -2,7 +2,7 @@ package mango.util;
 
 /**
  * ${DESCRIPTION}
- *
+ * 常量
  * @author Ricky Fung
  */
 public class Constants {

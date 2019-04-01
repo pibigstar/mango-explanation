@@ -3,13 +3,14 @@ package mango.util;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
  * ${DESCRIPTION}
- *
+ * 反射工具类
  * @author Ricky Fung
  */
 public class ReflectUtils {
@@ -18,6 +19,9 @@ public class ReflectUtils {
     private static final String GETTER_PREFIX = "get";
     private static final String IS_PREFIX = "is";
 
+    /**
+     * 根据字段名称获取字段对象
+     */
     public static Field getField(Class<?> clazz, String fieldName){
         for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType.getSuperclass()) {
             try {
@@ -31,6 +35,13 @@ public class ReflectUtils {
         return null;
     }
 
+    /**
+     * 获取writer方法
+     * 此处可用PropertyDescriptor优化
+     * PropertyDescriptor pd = new PropertyDescriptor(filed,clazz);
+     * 获取getter方法
+     * Method method = pd.getWriteMethod();
+     */
     public static Method getWriteMethod(Class<?> clazz, String propertyName, Class<?> parameterType) {
         String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(propertyName);
         return getAccessibleMethod(clazz, setterMethodName, parameterType);

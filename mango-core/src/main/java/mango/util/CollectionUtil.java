@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * ${DESCRIPTION}
- *
+ * 集合工具类，判断非空
  * @author Ricky Fung
  */
 public class CollectionUtil {

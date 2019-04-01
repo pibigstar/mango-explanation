@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 /**
  * @author Ricky Fung
+ * IO工具类
  */
 public class IoUtils {
 
@@ -14,6 +15,9 @@ public class IoUtils {
         closeQuietly((Closeable)input);
     }
 
+    /**
+     * 关闭流 OutputStream 实现了 Closeable 可关闭接口
+     */
     public static void closeQuietly(OutputStream output){
         closeQuietly((Closeable)output);
     }
@@ -28,6 +32,9 @@ public class IoUtils {
         }
     }
 
+    /**
+     * 关闭多个流
+     */
     public static void closeQuietly(Closeable... closeables){
         for (Closeable closeable : closeables){
             closeQuietly(closeable);
@@ -44,6 +51,9 @@ public class IoUtils {
         return copy(in, out, buff);
     }
 
+    /**
+     * 将输入流中的信息copy到输出流中
+     */
     public static long copy(InputStream in, OutputStream out, byte[] buff) throws IOException {
         long count = 0;
         int len = -1;

@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Ricky Fung
+ * 网络工具类
  */
 public class NetUtils {
     private static final Logger logger = LoggerFactory.getLogger(NetUtils.class);
@@ -34,27 +35,34 @@ public class NetUtils {
         return getLocalAddress(null);
     }
 
+    /**
+     * 获取本地地址，IP地址
+     */
     public static InetAddress getLocalAddress(Map<String, Integer> destHostPorts) {
         if (LOCAL_ADDRESS != null) {
+            // 如果不为空，说明获取过了，直接返回
             return LOCAL_ADDRESS;
         }
-
+        // 根据HostName获取IP地址
         InetAddress localAddress = getLocalAddressByHostname();
         if (!isValidAddress(localAddress)) {
             localAddress = getLocalAddressBySocket(destHostPorts);
         }
-
+        // 如果验证失败，就根据NetWork获取
         if (!isValidAddress(localAddress)) {
             localAddress = getLocalAddressByNetworkInterface();
         }
-
+        // 如果根据NetWork获取的验证失败，就让其地址等于根据HostName获取的
         if (isValidAddress(localAddress)) {
             LOCAL_ADDRESS = localAddress;
         }
-
         return localAddress;
     }
 
+    /**
+     * @Author:pibigstar
+     * 根据hostname获取本地IP地址
+     */
     private static InetAddress getLocalAddressByHostname() {
         try {
             InetAddress localAddress = InetAddress.getLocalHost();
@@ -127,8 +135,14 @@ public class NetUtils {
         return ADDRESS_PATTERN.matcher(address).matches();
     }
 
+    /**
+     * @Author:pibigstar
+     * 判断是否是有效的IP地址
+     */
     public static boolean isValidAddress(InetAddress address) {
-        if (address == null || address.isLoopbackAddress()) return false;
+        if (address == null || address.isLoopbackAddress()) {
+            return false;
+        }
         String name = address.getHostAddress();
         return (name != null && !ANYHOST.equals(name) && !LOCALHOST.equals(name) && IP_PATTERN.matcher(name).matches());
     }
